@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from "@nestjs/common";
 import { CarService } from "./car.service";
 import { CreateCarDto } from "./dto/create-car.dto";
@@ -17,6 +19,13 @@ import {
   ApiBearerAuth,
 } from "@nestjs/swagger";
 import { Car } from "./entities/car.entity";
+import { IsUserGuard } from "../common/guards/is.user.guard";
+import { AuthGuard } from "../common/guards/auth.guard";
+import { IsAdminGuard } from "../common/guards/is.admin.guard";
+import { ModelOwnershipGuardFactory } from "../common/guards/self.guard";
+import { Card } from "../card/entities/card.entity";
+
+const CarOwnershipGuard = ModelOwnershipGuardFactory(Car, "id", ["user"]);
 
 @ApiTags("Cars") // Swaggerda `Cars` deb ko‘rsatadi
 @ApiBearerAuth() // JWT token kerak bo‘lsa (token bilan himoyalangan bo‘lsa)
@@ -24,18 +33,31 @@ import { Car } from "./entities/car.entity";
 export class CarController {
   constructor(private readonly carService: CarService) {}
 
+  @Get("my-cars")
+  @UseGuards(AuthGuard, IsUserGuard)
+  @ApiOperation({ summary: "Foydalanuvchiga tegishli barcha Mashina olish" })
+  @ApiResponse({ status: 200, description: "Mashina ro‘yxati", type: [Card] })
+  async findAllForUser(@Req() req) {
+    const userId = req.user.id;
+    return this.carService.findAllByUserId(userId);
+  }
+
   @Post()
+  @UseGuards(IsUserGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Yangi avtomobil qo‘shish" })
   @ApiResponse({
     status: 201,
     description: "Avtomobil muvaffaqiyatli yaratildi",
     type: Car,
   })
-  create(@Body() createCarDto: CreateCarDto) {
-    return this.carService.create(createCarDto);
+  async create(@Body() createCarDto: CreateCarDto, @Req() req) {
+    return this.carService.create(createCarDto, req.user.id);
   }
 
   @Get()
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Barcha avtomobillarni olish" })
   @ApiResponse({
     status: 200,
@@ -47,6 +69,9 @@ export class CarController {
   }
 
   @Get(":id")
+  @UseGuards(CarOwnershipGuard)
+  @UseGuards(IsUserGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "ID bo‘yicha avtomobilni olish" })
   @ApiResponse({ status: 200, description: "Topilgan avtomobil", type: Car })
   @ApiResponse({ status: 404, description: "Avtomobil topilmadi" })
@@ -55,6 +80,9 @@ export class CarController {
   }
 
   @Patch(":id")
+  @UseGuards(CarOwnershipGuard)
+  @UseGuards(IsUserGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Avtomobilni yangilash" })
   @ApiResponse({ status: 200, description: "Avtomobil yangilandi", type: Car })
   update(@Param("id") id: string, @Body() updateCarDto: UpdateCarDto) {
@@ -62,6 +90,9 @@ export class CarController {
   }
 
   @Delete(":id")
+  @UseGuards(CarOwnershipGuard)
+  @UseGuards(IsUserGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Avtomobilni o‘chirish" })
   @ApiResponse({ status: 200, description: "Avtomobil o‘chirildi" })
   remove(@Param("id") id: string) {

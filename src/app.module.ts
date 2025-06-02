@@ -10,6 +10,16 @@ import { CityModule } from './city/city.module';
 import { RegionModule } from './region/region.module';
 import { WorkshopModule } from './workshop/workshop.module';
 import { AuthModule } from './auth/auth.module';
+import { ServiceModule } from './service/service.module';
+import { WorkshopServiceModule } from './workshop_service/workshop_service.module';
+import { ReviewModule } from './review/review.module';
+import { WorkshopScheduleModule } from './workshop_schedule/workshop_schedule.module';
+import { ProductModule } from './product/product.module';
+import { OrderProductModule } from './order_product/order_product.module';
+import { OrderModule } from './order/order.module';
+import { PaymentModule } from './payment/payment.module';
+import { MechanicModule } from './mechanic/mechanic.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -33,6 +43,16 @@ import { AuthModule } from './auth/auth.module';
     RegionModule,
     WorkshopModule,
     AuthModule,
+    ServiceModule,
+    WorkshopServiceModule,
+    ReviewModule,
+    WorkshopScheduleModule,
+    ProductModule,
+    OrderProductModule,
+    OrderModule,
+    PaymentModule,
+    MechanicModule,
+    MailModule
   ],
   controllers: [],
   providers: [],

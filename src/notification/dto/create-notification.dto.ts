@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString, IsBoolean, IsNumber } from "class-validator";
+import { User } from "../../users/entities/user.entity";
 
 export class CreateNotificationDto {
   @ApiProperty({
@@ -10,12 +11,8 @@ export class CreateNotificationDto {
   @IsNotEmpty({ message: "Xabar matni bo‘sh bo‘lishi mumkin emas" })
   message: string;
 
-  @ApiProperty({ example: false, description: "Notification o'qilganligi" })
-  @IsBoolean({ message: "is_read faqat true yoki false bo‘lishi mumkin" })
-  is_read: boolean;
-
   @ApiProperty({ example: 7, description: "Foydalanuvchi ID raqami" })
   @IsNumber({}, { message: "Foydalanuvchi ID raqam bo‘lishi kerak" })
   @IsNotEmpty({ message: "Foydalanuvchi ID majburiy" })
-  user_id: number;
+  user: User;
 }

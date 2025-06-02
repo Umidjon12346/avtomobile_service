@@ -18,6 +18,8 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from "@nestjs/swagger";
+import { AuthGuard } from "../common/guards/auth.guard";
+import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 
 @ApiTags("Workshop")
@@ -27,6 +29,8 @@ export class WorkshopController {
   constructor(private readonly workshopService: WorkshopService) {}
 
   @Post()
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Create new workshop" })
   @ApiResponse({ status: 201, description: "Workshop successfully created" })
   create(@Body() createWorkshopDto: CreateWorkshopDto) {
@@ -34,6 +38,7 @@ export class WorkshopController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Get all workshops" })
   @ApiResponse({ status: 200, description: "List of all workshops" })
   findAll() {
@@ -41,6 +46,7 @@ export class WorkshopController {
   }
 
   @Get(":id")
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Get a workshop by ID" })
   @ApiResponse({ status: 200, description: "Workshop found" })
   @ApiResponse({ status: 404, description: "Workshop not found" })
@@ -49,6 +55,8 @@ export class WorkshopController {
   }
 
   @Patch(":id")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Update a workshop by ID" })
   @ApiResponse({ status: 200, description: "Workshop successfully updated" })
   update(
@@ -59,6 +67,8 @@ export class WorkshopController {
   }
 
   @Delete(":id")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Delete a workshop by ID" })
   @ApiResponse({ status: 200, description: "Workshop successfully deleted" })
   remove(@Param("id") id: string) {

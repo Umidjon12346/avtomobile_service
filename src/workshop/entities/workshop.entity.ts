@@ -1,5 +1,9 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Region } from "../../region/entities/region.entity";
+import { Service } from "../../service/entities/service.entity";
+import { Review } from "../../review/entities/review.entity";
+import { WorkshopSchedule } from "../../workshop_schedule/entities/workshop_schedule.entity";
+import { Mechanic } from "../../mechanic/entities/mechanic.entity";
 
 @Entity()
 export class Workshop {
@@ -22,17 +26,15 @@ export class Workshop {
   @Column({ type: "varchar", nullable: true })
   phone: string;
 
-//   @OneToMany(() => WorkshopSchedule, (schedule) => schedule.workshop)
-//   schedules: WorkshopSchedule[];
+  @OneToMany(() => WorkshopSchedule, (schedule) => schedule.workshop)
+  schedules: WorkshopSchedule[];
 
-//   @OneToMany(() => Review, (review) => review.workshop)
-//   reviews: Review[];
+  @OneToMany(() => Review, (review) => review.workshop)
+  reviews: Review[];
 
-//   @ManyToMany(() => Service)
-//   @JoinTable({
-//     name: "workshops_services",
-//     joinColumn: { name: "workshop_id", referencedColumnName: "id" },
-//     inverseJoinColumn: { name: "service_id", referencedColumnName: "id" },
-//   })
-//   services: Service[];
+  @OneToMany(() => Mechanic, (review) => review.workshop)
+  mechanics: Mechanic[];
+
+  @ManyToMany(() => Service, (service) => service.workshops)
+  services: Service[];
 }

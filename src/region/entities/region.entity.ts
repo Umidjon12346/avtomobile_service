@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { City } from "../../city/entities/city.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { Workshop } from "../../workshop/entities/workshop.entity";
@@ -13,7 +13,7 @@ export class Region {
   name: string;
 
   @ApiProperty({ example: 1, description: "Shahar (City) ID si" })
-  @ManyToOne(() => City, (city) => city.regions, { onDelete: "CASCADE" })
+  @ManyToOne(() => City, (city) => city.regions, { onDelete: "CASCADE" },)
   city: City;
 
   @OneToMany(()=>Workshop,(workshop)=>workshop.region)

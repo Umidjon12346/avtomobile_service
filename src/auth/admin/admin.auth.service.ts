@@ -20,6 +20,7 @@ export class AuthAdminService {
   async generateTokens(admin: Admin) {
     const payload = {
       id: admin.id,
+      is_admin:true,
       is_active: admin.is_active,
       is_creator: admin.is_creator,
     };
@@ -43,7 +44,7 @@ export class AuthAdminService {
   async signIn(signInDto: SignInDto, res: Response) {
     const staff = await this.adminService.findByEmail(signInDto.email);
     if (!staff) {
-      throw new BadRequestException("Email yoki password");
+      throw new BadRequestException("Email yoki password1");
     }
     const isValid = await bcrypt.compare(
       signInDto.password,
@@ -70,7 +71,7 @@ export class AuthAdminService {
   }
 
   async adminRefreshToken(req: Request, res: Response) {
-    const refresh_token = req.cookies["student_refresh_token"];
+    const refresh_token = req.cookies["admin_refresh_token"];
     if (!refresh_token) {
       throw new ForbiddenException("Refresh token yo'q");
     }
@@ -88,7 +89,7 @@ export class AuthAdminService {
 
     const tokens = await this.generateTokens(student);
     const hashed_refresh_token = await bcrypt.hash(tokens.refreshToken, 7);
-    student.hashed_password = hashed_refresh_token;
+    student.hashed_refresh_token = hashed_refresh_token;
     await this.adminService.update(student.id, student);
 
     res.cookie("admin_refresh_token", tokens.refreshToken, {

@@ -22,9 +22,4 @@ export class CreateCardDto {
   )
   @IsNotEmpty({ message: "Karta amal qilish muddati majburiy" })
   date: string;
-
-  @ApiProperty({ example: 7, description: "Foydalanuvchi ID raqami" })
-  @IsNumber({}, { message: "Foydalanuvchi ID raqami raqam bo‘lishi kerak" })
-  @IsNotEmpty({ message: "Foydalanuvchi ID raqami talab qilinadi" })
-  userId: number;
 }

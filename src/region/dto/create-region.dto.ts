@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsNotEmpty, IsInt } from "class-validator";
+import { User } from "../../users/entities/user.entity";
 
 export class CreateRegionDto {
   @ApiProperty({ example: "Mirzo Ulug'bek", description: "Hudud nomi" })
@@ -9,5 +10,6 @@ export class CreateRegionDto {
 
   @ApiProperty({ example: 1, description: "Shahar (City) ID si" })
   @IsInt({ message: "Shahar ID butun son bo'lishi kerak" })
-  cityId: number;
+  @IsNotEmpty({ message: "Shahar ID bo'sh bo'lishi mumkin emas" })
+  city: User;
 }

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { CityService } from "./city.service";
 import { CreateCityDto } from "./dto/create-city.dto";
@@ -20,6 +21,8 @@ import {
   ApiBearerAuth,
 } from "@nestjs/swagger";
 import { City } from "./entities/city.entity";
+import { AuthGuard } from "../common/guards/auth.guard";
+import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("city")
 @ApiBearerAuth()
@@ -27,7 +30,9 @@ import { City } from "./entities/city.entity";
 export class CityController {
   constructor(private readonly cityService: CityService) {}
 
-  @Post()
+  @Post("/")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Create a new city" })
   @ApiBody({ type: CreateCityDto })
   @ApiResponse({
@@ -40,6 +45,7 @@ export class CityController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Get all cities" })
   @ApiResponse({ status: 200, description: "List of cities", type: [City] })
   findAll() {
@@ -47,6 +53,7 @@ export class CityController {
   }
 
   @Get(":id")
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Get city by ID" })
   @ApiParam({ name: "id", type: Number, description: "City ID" })
   @ApiResponse({ status: 200, description: "City found", type: City })
@@ -56,6 +63,8 @@ export class CityController {
   }
 
   @Patch(":id")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Update a city by ID" })
   @ApiParam({ name: "id", type: Number, description: "City ID" })
   @ApiBody({ type: UpdateCityDto })
@@ -70,6 +79,8 @@ export class CityController {
   }
 
   @Delete(":id")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Delete a city by ID" })
   @ApiParam({ name: "id", type: Number, description: "City ID" })
   @ApiResponse({

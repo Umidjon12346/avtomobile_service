@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
 } from "@nestjs/common";
@@ -9,6 +10,7 @@ import { Request, Response } from "express";
 import * as bcrypt from "bcrypt";
 import { UsersService } from "../../users/users.service";
 import { User } from "../../users/entities/user.entity";
+import { CreateUserDto } from "../../users/dto/create-user.dto";
 
 
 @Injectable()
@@ -21,7 +23,7 @@ export class AuthUserService {
   async generateToken(student: User) {
     const payload = {
       id: student.id,
-      role: "user",
+      is_admin:false,
       email: student.email,
       is_active: student.is_active,
     };
@@ -39,6 +41,18 @@ export class AuthUserService {
       accessToken,
       refreshToken,
     };
+  }
+
+  async signUp(createPatientDto: CreateUserDto) {
+    const candidate = await this.studentService.findByEmail(
+      createPatientDto.email
+    );
+    if (candidate) {
+      throw new ConflictException("bunday emailli patient bor");
+    }
+
+    const newUser = await this.studentService.create(createPatientDto);
+    return { message: "Foydalanuvchi qoshildida", newUser };
   }
 
   async signIn(singInDto: SignInDto, res: Response) {

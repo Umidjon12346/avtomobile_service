@@ -22,12 +22,4 @@ export class CreateCarDto {
   @IsString()
   @IsNotEmpty()
   carNumber: string;
-
-  @ApiProperty({
-    example: 5,
-    description: "Foydalanuvchi ID raqami (avtomobil egasi)",
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  user_id: number;
 }

@@ -1,8 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Generated } from "typeorm";
 import { Notification } from "../../notification/entities/notification.entity";
 import { Car } from "../../car/entities/car.entity";
 import { Card } from "../../card/entities/card.entity";
 import { ApiProperty } from "@nestjs/swagger";
+import { Review } from "../../review/entities/review.entity";
+import { Order } from "../../order/entities/order.entity";
+import { v4 as uuidv4 } from "uuid";
 
 @Entity("users")
 export class User {
@@ -52,6 +55,10 @@ export class User {
   @Column({ default: false })
   is_active: boolean;
 
+  @Column({ nullable: true })
+  @Generated("uuid")
+  activation_link: string;
+
   @ApiProperty({
     type: () => [Notification],
     description: "Foydalanuvchining notificationlari",
@@ -75,4 +82,17 @@ export class User {
   })
   @OneToMany(() => Card, (card) => card.user)
   cards: Card[];
+
+  @ApiProperty({
+    type: () => [Review],
+    description: "Foydalanuvchining Komentlari",
+    required: false,
+  })
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
+
+  
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }

@@ -4,17 +4,25 @@ import { Repository } from "typeorm";
 import { Car } from "./entities/car.entity";
 import { CreateCarDto } from "./dto/create-car.dto";
 import { UpdateCarDto } from "./dto/update-car.dto";
+import { User } from "../users/entities/user.entity";
 
 @Injectable()
 export class CarService {
   constructor(
     @InjectRepository(Car)
-    private readonly carRepo: Repository<Car>
+    private readonly carRepo: Repository<Car>,
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>
   ) {}
 
-  async create(createCarDto: CreateCarDto) {
-    const newCar = this.carRepo.create(createCarDto);
-    return await this.carRepo.save(newCar);
+  async create(createCarDto: CreateCarDto, userId: number) {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException("Foydalanuvchi topilmadi");
+    }
+
+    const car = this.carRepo.create({ ...createCarDto, user });
+    return await this.carRepo.save(car);
   }
 
   async findAll() {
@@ -33,6 +41,13 @@ export class CarService {
 
     return car;
   }
+
+  async findAllByUserId(userId: number): Promise<Car[]> {
+      return this.carRepo.find({
+        where: { user: { id: userId } }, // user relation orqali id bo'yicha filter
+        relations: ["user"], // agar user relationni yuklamoqchi bo‘lsangiz
+      });
+    }
 
   async update(id: number, updateCarDto: UpdateCarDto) {
     const car = await this.carRepo.preload({

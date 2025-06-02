@@ -18,6 +18,8 @@ import {
   ApiOperation,
   ApiResponse,
 } from "@nestjs/swagger";
+import { AuthGuard } from "../common/guards/auth.guard";
+import { IsAdminGuard } from "../common/guards/is.admin.guard";
 // JWT guardingiz joylashuvi
 
 @ApiTags("region")
@@ -27,6 +29,8 @@ export class RegionController {
   constructor(private readonly regionService: RegionService) {}
 
   @Post()
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Create a new region" })
   @ApiResponse({ status: 201, description: "Region created successfully." })
   create(@Body() createRegionDto: CreateRegionDto) {
@@ -34,6 +38,7 @@ export class RegionController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Get all regions" })
   @ApiResponse({ status: 200, description: "List of regions" })
   findAll() {
@@ -41,6 +46,7 @@ export class RegionController {
   }
 
   @Get(":id")
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Get a region by id" })
   @ApiResponse({ status: 200, description: "Region found" })
   findOne(@Param("id") id: string) {
@@ -48,6 +54,8 @@ export class RegionController {
   }
 
   @Patch(":id")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Update a region by id" })
   @ApiResponse({ status: 200, description: "Region updated successfully" })
   update(@Param("id") id: string, @Body() updateRegionDto: UpdateRegionDto) {
@@ -55,6 +63,8 @@ export class RegionController {
   }
 
   @Delete(":id")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Delete a region by id" })
   @ApiResponse({ status: 200, description: "Region deleted successfully" })
   remove(@Param("id") id: string) {
