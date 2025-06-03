@@ -14,47 +14,7 @@ import {
   Max,
 } from "class-validator";
 import { Type } from "class-transformer";
-
-class OrderProductDto {
-  @ApiProperty({ example: 1, description: "Product ID" })
-  @IsNumber(
-    {},
-    {
-      message: "Mahsulot ID raqam boʻlishi kerak",
-    }
-  )
-  @IsNotEmpty({
-    message: "Mahsulot ID kiritilishi shart",
-  })
-  product_id: number;
-
-  @ApiProperty({ example: 2, description: "Quantity of the product" })
-  @IsNumber(
-    {},
-    {
-      message: "Miqdor raqam boʻlishi kerak",
-    }
-  )
-  @Min(1, {
-    message: "Miqdor kamida 1 boʻlishi kerak",
-  })
-  @Max(100, {
-    message: "Miqdor 100 dan oshmasligi kerak",
-  })
-  quantity: number;
-
-  @ApiProperty({ example: 49.99, description: "Unit price at time of order" })
-  @IsDecimal(
-    {},
-    {
-      message: "Narx decimal son boʻlishi kerak",
-    }
-  )
-  @Min(0.01, {
-    message: "Narx kamida 0.01 boʻlishi kerak",
-  })
-  unit_price: number;
-}
+import { OrderProduct } from "../../order_product/entities/order_product.entity";
 
 export class CreateOrderDto {
   @ApiProperty({ example: 1, description: "User ID placing the order" })
@@ -120,13 +80,13 @@ export class CreateOrderDto {
   scheduled_at?: Date;
 
   @ApiProperty({
-    type: [OrderProductDto],
+    type: [OrderProduct],
     description: "List of products in the order",
   })
   @IsArray({
     message: "Mahsulotlar roʻyxat koʻrinishida kiritilishi kerak",
   })
   @ValidateNested({ each: true })
-  @Type(() => OrderProductDto)
-  products: OrderProductDto[];
+  @Type(() => OrderProduct)
+  orderProducts: OrderProduct[];
 }

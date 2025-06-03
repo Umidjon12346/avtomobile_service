@@ -28,6 +28,23 @@ import { IsAdminGuard } from "../common/guards/is.admin.guard";
 export class WorkshopController {
   constructor(private readonly workshopService: WorkshopServices) {}
 
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
+  @Get("stats")
+  @ApiOperation({
+    summary: "Har bir workshop bo‘yicha xizmatlar va mexaniklar statistikasi",
+  })
+  async getWorkshopStats() {
+    return this.workshopService.getWorkshopStats();
+  }
+
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
+  @Get("top")
+  async getTopWorkshops() {
+    return await this.workshopService.getTopWorkshops();
+  }
+
   @Post()
   @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)

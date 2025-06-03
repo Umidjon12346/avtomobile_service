@@ -25,11 +25,8 @@ export class Order {
     type: () => User,
     description: "The user who placed the order",
   })
-
-  
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
-
 
   @ApiProperty({
     type: () => Mechanic,
@@ -76,7 +73,10 @@ export class Order {
     description: "When the order was created",
     nullable: true,
   })
-  @Column("timestamp", { nullable: true })
+  @Column("timestamp", {
+    nullable: true,
+    default: () => "CURRENT_TIMESTAMP", 
+  })
   created_at: Date;
 
   @ApiProperty({

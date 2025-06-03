@@ -21,6 +21,9 @@ import { Admin } from "./entities/admin.entity";
 import { IsAdminGuard } from "../common/guards/is.admin.guard";
 import { IsSuperAdminGuard } from "../common/guards/is.super.admin.guard";
 import { AuthGuard } from "../common/guards/auth.guard";
+import { ModelOwnershipGuardFactory } from "../common/guards/self.guard";
+
+const AdminOwnershipGuard = ModelOwnershipGuardFactory(Admin, "id", ["id"]);
 
 @ApiTags("Admins") // Swagger tag
 @ApiBearerAuth() // Agar access token bilan himoyalangan bo‘lsa
@@ -51,7 +54,8 @@ export class AdminsController {
   }
 
   @Get(":id")
-  @UseGuards(IsSuperAdminGuard)
+  @UseGuards(AdminOwnershipGuard)
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "ID bo‘yicha adminni olish" })
   @ApiResponse({ status: 200, description: "Topilgan admin", type: Admin })

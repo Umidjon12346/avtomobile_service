@@ -14,10 +14,4 @@ export class CreateProductDto {
   @ApiProperty({ example: 1.99, description: "Mahsulot narxi" })
   price: number;
 
-  @ApiProperty({
-    example: true,
-    description: "Mahsulot mavjudligi",
-    required: false,
-  })
-  in_stock?: boolean;
 }

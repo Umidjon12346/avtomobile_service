@@ -3,10 +3,18 @@ import { AppModule } from "./app.module";
 import * as cookieParser from "cookie-parser";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as basicAuth from "express-basic-auth";
+import { ConsoleLogger } from "@nestjs/common";
+import { WinstonModule } from "nest-winston";
+import { winstonConfig } from "./common/logger/winston-logger";
+import { AllExceptionsFilter } from "./common/errors/error.handling";
 
 async function bootstrap() {
   const PORT = process.env.PORT || 3030;
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger(winstonConfig),
+  });
+
+  app.useGlobalFilters(new AllExceptionsFilter())
 
   // CORS ni yoqish (cookie yuborish uchun credentials: true ham kerak bo'lishi mumkin)
   app.enableCors({

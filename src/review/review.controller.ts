@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -20,6 +21,10 @@ import { UpdateReviewDto } from "./dto/update-review.dto";
 import { Review } from "./entities/review.entity";
 import { AuthGuard } from "../common/guards/auth.guard";
 import { IsAdminGuard } from "../common/guards/is.admin.guard";
+import { ModelOwnershipGuardFactory } from "../common/guards/self.guard";
+import { IsUserGuard } from "../common/guards/is.user.guard";
+
+const ReviewOwnershipGuard = ModelOwnershipGuardFactory(Review, "id", ["user"]);
 
 @ApiTags("Review")
 @ApiBearerAuth()
@@ -28,11 +33,21 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
+  @UseGuards(IsUserGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Yangi review yaratish" })
   @ApiResponse({ status: 201, description: "Review yaratildi.", type: Review })
-  create(@Body() createReviewDto: CreateReviewDto) {
-    return this.reviewService.create(createReviewDto);
+  create(@Body() createReviewDto: CreateReviewDto, @Req() req) {
+    return this.reviewService.create(createReviewDto, req.user.id);
+  }
+
+  @Post("admin")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: "Yangi review yaratish" })
+  @ApiResponse({ status: 201, description: "Review yaratildi.", type: Review })
+  create1(@Body() createReviewDto: CreateReviewDto, @Req() req) {
+    return this.reviewService.create(createReviewDto, req.user.id);
   }
 
   @Get()
@@ -56,6 +71,8 @@ export class ReviewController {
   }
 
   @Patch(":id")
+  @UseGuards(ReviewOwnershipGuard)
+  @UseGuards(IsUserGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Reviewni yangilash" })
   @ApiResponse({ status: 200, description: "Review yangilandi", type: Review })

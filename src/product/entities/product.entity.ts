@@ -29,7 +29,7 @@ export class Product {
     description: "Mahsulot zaxirada mavjudmi",
     required: false,
   })
-  @Column("boolean", { nullable: true })
+  @Column("boolean", { default: true,nullable:true })
   in_stock: boolean;
 
   @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.product)

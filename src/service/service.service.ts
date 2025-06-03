@@ -47,4 +47,27 @@ export class ServiceService {
     const service = await this.findOne(id);
     return await this.serviceRepo.remove(service);
   }
+
+  //=============================================================================================
+  async getMonthlyServiceRevenue() {
+    return this.serviceRepo
+      .createQueryBuilder("s")
+      .select([
+        "s.id AS service_id",
+        "s.name AS service_name",
+        "COUNT(o.id) AS order_count",
+        "SUM(s.price) AS total_revenue",
+        "AVG(s.price) AS avg_price",
+        "EXTRACT(MONTH FROM o.created_at) AS month",
+      ])
+      .innerJoin("s.orders", "o")
+      .where(
+        "EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM CURRENT_DATE)"
+      )
+      .andWhere("s.is_active = :isActive", { isActive: true })
+      .groupBy("s.id, s.name, EXTRACT(MONTH FROM o.created_at)")
+      .orderBy("month")
+      .addOrderBy("total_revenue", "DESC")
+      .getRawMany();
+  }
 }

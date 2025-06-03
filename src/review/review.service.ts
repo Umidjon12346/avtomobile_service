@@ -4,17 +4,28 @@ import { Repository } from "typeorm";
 import { Review } from "./entities/review.entity";
 import { CreateReviewDto } from "./dto/create-review.dto";
 import { UpdateReviewDto } from "./dto/update-review.dto";
+import { User } from "../users/entities/user.entity";
 
 @Injectable()
 export class ReviewService {
   constructor(
     @InjectRepository(Review)
-    private readonly reviewRepo: Repository<Review>
+    private readonly reviewRepo: Repository<Review>,
+    @InjectRepository(User)
+        private readonly userRepo: Repository<User>
   ) {}
 
-  async create(createReviewDto: CreateReviewDto): Promise<Review> {
-    const review = this.reviewRepo.create(createReviewDto);
-    return await this.reviewRepo.save(review);
+  async create(createReviewDto: CreateReviewDto,userId:number): Promise<Review> {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException("Foydalanuvchi topilmadi");
+    }
+
+    const newCard = this.reviewRepo.create({
+      ...createReviewDto,
+      user, // userni entity tarzida ulayapmiz
+    });
+    return await this.reviewRepo.save(newCard);
   }
 
   async findAll(): Promise<Review[]> {

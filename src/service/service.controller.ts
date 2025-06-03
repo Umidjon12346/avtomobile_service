@@ -43,6 +43,12 @@ export class ServiceController {
   findAll() {
     return this.serviceService.findAll();
   }
+  @Get("stats")
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
+  stats() {
+    return this.serviceService.getMonthlyServiceRevenue();
+  }
 
   @Get(":id")
   @UseGuards(AuthGuard)
