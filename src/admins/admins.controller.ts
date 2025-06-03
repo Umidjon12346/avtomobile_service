@@ -32,7 +32,7 @@ export class AdminsController {
   constructor(private readonly adminsService: AdminsService) {}
 
   @Post()
-  @UseGuards(IsSuperAdminGuard)
+  // @UseGuards(IsSuperAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Yangi admin yaratish" })
   @ApiResponse({
