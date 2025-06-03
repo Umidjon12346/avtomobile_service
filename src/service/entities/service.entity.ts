@@ -9,6 +9,8 @@ import {
 } from "typeorm";
 import { Workshop } from "../../workshop/entities/workshop.entity";
 import { Order } from "../../order/entities/order.entity";
+import { WorkshopService } from "../../workshop_service/entities/workshop_service.entity";
+
 
 @Entity()
 export class Service {
@@ -53,14 +55,9 @@ export class Service {
     isArray: true,
     description: "Workshops that offer this service",
   })
-  @ManyToMany(() => Workshop, (workshop) => workshop.services)
-  @JoinTable({
-    name: "workshop_service",
-    joinColumn: { name: "service_id", referencedColumnName: "id" },
-    inverseJoinColumn: { name: "workshop_id", referencedColumnName: "id" },
-  })
-  workshops: Workshop[];
-
   @OneToMany(() => Order, (order) => order.service)
   orders: Order[];
+
+  @OneToMany(() => WorkshopService, (ws) => ws.service)
+  workshops: WorkshopService[];
 }

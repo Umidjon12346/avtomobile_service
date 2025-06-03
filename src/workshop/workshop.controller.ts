@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { WorkshopService } from "./workshop.service";
+import { WorkshopServices } from "./workshop.service";
 import { CreateWorkshopDto } from "./dto/create-workshop.dto";
 import { UpdateWorkshopDto } from "./dto/update-workshop.dto";
 
@@ -26,7 +26,7 @@ import { IsAdminGuard } from "../common/guards/is.admin.guard";
 @ApiBearerAuth()
 @Controller("workshop")
 export class WorkshopController {
-  constructor(private readonly workshopService: WorkshopService) {}
+  constructor(private readonly workshopService: WorkshopServices) {}
 
   @Post()
   @UseGuards(IsAdminGuard)

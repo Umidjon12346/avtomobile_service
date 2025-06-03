@@ -36,6 +36,7 @@ export class OrderProductController {
   }
 
   @Get()
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Barcha OrderProductlarni olish" })
   @ApiResponse({
@@ -61,6 +62,7 @@ export class OrderProductController {
   }
 
   @Patch(":id")
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "OrderProductni yangilash" })
   @ApiParam({ name: "id", example: 1 })
@@ -77,6 +79,7 @@ export class OrderProductController {
   }
 
   @Delete(":id")
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "OrderProductni o‘chirish" })
   @ApiParam({ name: "id", example: 1 })

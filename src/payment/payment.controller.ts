@@ -14,6 +14,7 @@ import { UpdatePaymentDto } from "./dto/update-payment.dto";
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from "@nestjs/swagger";
 import { Payment } from "./entities/payment.entity";
 import { AuthGuard } from "../common/guards/auth.guard";
+import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("Payment")
 @ApiBearerAuth() // Swagger guruh nomi
@@ -30,6 +31,7 @@ export class PaymentController {
   }
 
   @Get()
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Barcha to‘lovlarni olish" })
   @ApiResponse({
@@ -51,6 +53,7 @@ export class PaymentController {
   }
 
   @Patch(":id")
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "To‘lovni yangilash" })
   @ApiParam({ name: "id", example: 1 })
@@ -60,6 +63,7 @@ export class PaymentController {
   }
 
   @Delete(":id")
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "To‘lovni o‘chirish" })
   @ApiParam({ name: "id", example: 1 })

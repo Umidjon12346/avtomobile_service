@@ -4,6 +4,8 @@ import { Service } from "../../service/entities/service.entity";
 import { Review } from "../../review/entities/review.entity";
 import { WorkshopSchedule } from "../../workshop_schedule/entities/workshop_schedule.entity";
 import { Mechanic } from "../../mechanic/entities/mechanic.entity";
+import { WorkshopService } from "../../workshop_service/entities/workshop_service.entity";
+
 
 @Entity()
 export class Workshop {
@@ -35,6 +37,6 @@ export class Workshop {
   @OneToMany(() => Mechanic, (review) => review.workshop)
   mechanics: Mechanic[];
 
-  @ManyToMany(() => Service, (service) => service.workshops)
-  services: Service[];
+  @OneToMany(() => WorkshopService, (ws) => ws.workshop)
+  services: WorkshopService[];
 }

@@ -6,7 +6,7 @@ import { CreateWorkshopDto } from "./dto/create-workshop.dto";
 import { UpdateWorkshopDto } from "./dto/update-workshop.dto";
 
 @Injectable()
-export class WorkshopService {
+export class WorkshopServices {
   constructor(
     @InjectRepository(Workshop)
     private readonly workshopRepo: Repository<Workshop>
@@ -19,14 +19,14 @@ export class WorkshopService {
 
   async findAll() {
     return await this.workshopRepo.find({
-      relations: ["workshops_services"], 
+      relations: ["region"], 
     });
   }
 
   async findOne(id: number) {
     const workshop = await this.workshopRepo.findOne({
       where: { id },
-      relations: ["regions"],
+      relations: ["region"],
     });
 
     if (!workshop) {

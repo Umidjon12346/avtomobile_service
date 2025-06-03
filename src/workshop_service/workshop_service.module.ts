@@ -7,8 +7,13 @@ import { ServiceModule } from '../service/service.module';
 import { WorkshopModule } from '../workshop/workshop.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([WorkshopService]),ServiceModule,WorkshopModule],
+  imports: [
+    TypeOrmModule.forFeature([WorkshopService]),
+    ServiceModule,
+    WorkshopModule,
+  ],
   controllers: [WorkshopServiceController],
   providers: [WorkshopServiceService],
+  exports: [TypeOrmModule.forFeature([WorkshopService])],
 })
 export class WorkshopServiceModule {}

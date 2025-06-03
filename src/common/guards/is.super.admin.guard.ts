@@ -13,7 +13,7 @@ export class IsSuperAdminGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
 
-    if (!req.user || !req.user.is_creator) {
+    if (!req.user || !req.user.is_creator || !req.user.is_admin) {
       throw new ForbiddenException({
         message: "Faqat superadmin uchun ruxsat berilgan",
       });

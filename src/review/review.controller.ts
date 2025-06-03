@@ -19,6 +19,7 @@ import { CreateReviewDto } from "./dto/create-review.dto";
 import { UpdateReviewDto } from "./dto/update-review.dto";
 import { Review } from "./entities/review.entity";
 import { AuthGuard } from "../common/guards/auth.guard";
+import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("Review")
 @ApiBearerAuth()
@@ -63,6 +64,7 @@ export class ReviewController {
   }
 
   @Delete(":id")
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Reviewni o‘chirish" })
   @ApiResponse({ status: 200, description: "Review o‘chirildi", type: Review })

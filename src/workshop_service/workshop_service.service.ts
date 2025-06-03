@@ -22,10 +22,11 @@ export class WorkshopServiceService {
 
   async create(createDto: CreateWorkshopServiceDto) {
     const workshop = await this.workshopRepo.findOneBy({
-      id: createDto.workshopId,
+      id: createDto.workshop_id,
     });
+
     const service = await this.serviceRepo.findOneBy({
-      id: createDto.serviceId,
+      id: createDto.service_id, // <-- to‘g‘rilandi
     });
 
     if (!workshop || !service) {
@@ -65,17 +66,17 @@ export class WorkshopServiceService {
       throw new NotFoundException(`WorkshopService with ID ${id} not found`);
     }
 
-    if (updateDto.workshopId) {
+    if (updateDto.workshop_id) {
       const workshop = await this.workshopRepo.findOneBy({
-        id: updateDto.workshopId,
+        id: updateDto.workshop_id,
       });
       if (!workshop) throw new NotFoundException("Workshop not found");
       item.workshop = workshop;
     }
 
-    if (updateDto.serviceId) {
+    if (updateDto.service_id) {
       const service = await this.serviceRepo.findOneBy({
-        id: updateDto.serviceId,
+        id: updateDto.service_id,
       });
       if (!service) throw new NotFoundException("Service not found");
       item.service = service;

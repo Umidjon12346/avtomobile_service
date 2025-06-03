@@ -14,6 +14,7 @@ import { UpdateMechanicDto } from "./dto/update-mechanic.dto";
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
 import { Mechanic } from "./entities/mechanic.entity";
 import { AuthGuard } from "../common/guards/auth.guard";
+import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("Mechanics")
 @Controller("mechanic")
@@ -21,6 +22,7 @@ export class MechanicController {
   constructor(private readonly mechanicService: MechanicService) {}
 
   @Post()
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Yangi mexanik qo‘shish" })
   @ApiResponse({
@@ -33,6 +35,7 @@ export class MechanicController {
   }
 
   @Get()
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Barcha mexaniklarni olish" })
   @ApiResponse({
@@ -58,6 +61,7 @@ export class MechanicController {
   }
 
   @Patch(":id")
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Mexanikni yangilash" })
   @ApiParam({ name: "id", example: 1 })
@@ -74,6 +78,7 @@ export class MechanicController {
   }
 
   @Delete(":id")
+  @UseGuards(IsAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Mexanikni o‘chirish" })
   @ApiParam({ name: "id", example: 1 })

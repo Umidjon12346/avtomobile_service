@@ -4,20 +4,37 @@ import { Repository } from "typeorm";
 import { CreateWorkshopScheduleDto } from "./dto/create-workshop_schedule.dto";
 import { UpdateWorkshopScheduleDto } from "./dto/update-workshop_schedule.dto";
 import { WorkshopSchedule } from "./entities/workshop_schedule.entity";
+import { Workshop } from "../workshop/entities/workshop.entity";
 
 @Injectable()
 export class WorkshopScheduleService {
   constructor(
     @InjectRepository(WorkshopSchedule)
-    private readonly workshopScheduleRepository: Repository<WorkshopSchedule>
+    private readonly workshopScheduleRepository: Repository<WorkshopSchedule>,
+    @InjectRepository(Workshop)
+    private readonly workshopRepository: Repository<Workshop>
   ) {}
 
   async create(
     createWorkshopScheduleDto: CreateWorkshopScheduleDto
   ): Promise<WorkshopSchedule> {
-    const schedule = this.workshopScheduleRepository.create(
-      createWorkshopScheduleDto
-    );
+    // Workshop ID bo'yicha Workshop ni qidiramiz
+    const workshop = await this.workshopRepository.findOneBy({
+      id: createWorkshopScheduleDto.workshopId,
+    });
+
+    if (!workshop) {
+      throw new NotFoundException(
+        `Workshop with ID ${createWorkshopScheduleDto.workshopId} not found`
+      );
+    }
+
+    // DTOdagi workshopId ni to'g'ridan-to'g'ri entitiyga o'zgartiramiz
+    const schedule = this.workshopScheduleRepository.create({
+      ...createWorkshopScheduleDto,
+      workshop: workshop, // relation sifatida qo'shamiz
+    });
+
     return await this.workshopScheduleRepository.save(schedule);
   }
 
