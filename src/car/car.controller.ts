@@ -28,7 +28,7 @@ import { Card } from "../card/entities/card.entity";
 const CarOwnershipGuard = ModelOwnershipGuardFactory(Car, "id", ["user"]);
 
 @ApiTags("Cars") // Swaggerda `Cars` deb ko‘rsatadi
-@ApiBearerAuth() // JWT token kerak bo‘lsa (token bilan himoyalangan bo‘lsa)
+@ApiBearerAuth("JWT-auth") // JWT token kerak bo‘lsa (token bilan himoyalangan bo‘lsa)
 @Controller("car")
 export class CarController {
   constructor(private readonly carService: CarService) {}

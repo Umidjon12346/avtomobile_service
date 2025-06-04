@@ -25,7 +25,7 @@ import { AuthGuard } from "../common/guards/auth.guard";
 import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("city")
-@ApiBearerAuth()
+@ApiBearerAuth("JWT-auth")
 @Controller("city")
 export class CityController {
   constructor(private readonly cityService: CityService) {}

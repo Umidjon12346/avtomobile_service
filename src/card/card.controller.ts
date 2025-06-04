@@ -30,7 +30,7 @@ import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 const CardOwnershipGuard = ModelOwnershipGuardFactory(Card, "id", ["user"]);
 @ApiTags("Cards")
-@ApiBearerAuth() // Agar JWT bilan himoyalangan bo‘lsa
+@ApiBearerAuth("JWT-auth") // Agar JWT bilan himoyalangan bo‘lsa
 @Controller("card")
 export class CardController {
   constructor(private readonly cardService: CardService) {}
@@ -54,7 +54,7 @@ export class CardController {
     type: Card,
   })
   create(@Body() createCardDto: CreateCardDto, @Req() req) {
-    return this.cardService.create(createCardDto,req.user.id);
+    return this.cardService.create(createCardDto, req.user.id);
   }
 
   @Get()

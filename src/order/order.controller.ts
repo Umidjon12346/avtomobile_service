@@ -29,7 +29,7 @@ import { ModelOwnershipGuardFactory } from "../common/guards/self.guard";
 const OrderOwnershipGuard = ModelOwnershipGuardFactory(Order, "id", ["user"]);
 
 @ApiTags("Order")
-@ApiBearerAuth() // Swagger UI'dagi guruh nomi
+@ApiBearerAuth("JWT-auth") // Swagger UI'dagi guruh nomi
 @Controller("order")
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}

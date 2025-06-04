@@ -27,7 +27,7 @@ import { IsUserGuard } from "../common/guards/is.user.guard";
 const ReviewOwnershipGuard = ModelOwnershipGuardFactory(Review, "id", ["user"]);
 
 @ApiTags("Review")
-@ApiBearerAuth()
+@ApiBearerAuth("JWT-auth")
 @Controller("review")
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}

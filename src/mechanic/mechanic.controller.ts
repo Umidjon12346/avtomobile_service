@@ -11,13 +11,14 @@ import {
 import { MechanicService } from "./mechanic.service";
 import { CreateMechanicDto } from "./dto/create-mechanic.dto";
 import { UpdateMechanicDto } from "./dto/update-mechanic.dto";
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from "@nestjs/swagger";
 import { Mechanic } from "./entities/mechanic.entity";
 import { AuthGuard } from "../common/guards/auth.guard";
 import { IsAdminGuard } from "../common/guards/is.admin.guard";
 import { IsSuperAdminGuard } from "../common/guards/is.super.admin.guard";
 
 @ApiTags("Mechanics")
+@ApiBearerAuth("JWT-auth")
 @Controller("mechanic")
 export class MechanicController {
   constructor(private readonly mechanicService: MechanicService) {}

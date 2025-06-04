@@ -26,13 +26,13 @@ import { ModelOwnershipGuardFactory } from "../common/guards/self.guard";
 const AdminOwnershipGuard = ModelOwnershipGuardFactory(Admin, "id", ["id"]);
 
 @ApiTags("Admins") // Swagger tag
-@ApiBearerAuth() // Agar access token bilan himoyalangan bo‘lsa
+@ApiBearerAuth("JWT-auth") // Agar access token bilan himoyalangan bo‘lsa
 @Controller("admins")
 export class AdminsController {
   constructor(private readonly adminsService: AdminsService) {}
 
   @Post()
-  // @UseGuards(IsSuperAdminGuard)
+  @UseGuards(IsSuperAdminGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Yangi admin yaratish" })
   @ApiResponse({

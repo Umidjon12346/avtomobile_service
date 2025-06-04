@@ -22,7 +22,7 @@ import { AuthGuard } from "../common/guards/auth.guard";
 import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("Services")
-@ApiBearerAuth() // Agar authentication kerak bo‘lsa
+@ApiBearerAuth("JWT-auth") // Agar authentication kerak bo‘lsa
 @Controller("service")
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}

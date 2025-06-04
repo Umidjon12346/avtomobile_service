@@ -23,7 +23,7 @@ import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 
 @ApiTags("Workshop")
-@ApiBearerAuth()
+@ApiBearerAuth("JWT-auth")
 @Controller("workshop")
 export class WorkshopController {
   constructor(private readonly workshopService: WorkshopServices) {}

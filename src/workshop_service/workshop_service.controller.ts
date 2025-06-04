@@ -22,7 +22,7 @@ import { AuthGuard } from "../common/guards/auth.guard";
 import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("Workshop Services")
-@ApiBearerAuth() // Agar JWT authentication ishlatilsa
+@ApiBearerAuth("JWT-auth") // Agar JWT authentication ishlatilsa
 @Controller("workshop-service")
 export class WorkshopServiceController {
   constructor(

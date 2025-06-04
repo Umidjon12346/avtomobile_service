@@ -23,7 +23,7 @@ import { IsAdminGuard } from "../common/guards/is.admin.guard";
 // JWT guardingiz joylashuvi
 
 @ApiTags("region")
-@ApiBearerAuth() // Bu dekorator swaggerga "Authorize" tugmasini qo'shadi
+@ApiBearerAuth("JWT-auth") // Bu dekorator swaggerga "Authorize" tugmasini qo'shadi
 @Controller("region")
 export class RegionController {
   constructor(private readonly regionService: RegionService) {}

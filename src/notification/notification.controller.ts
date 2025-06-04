@@ -27,19 +27,23 @@ import { IsUserGuard } from "../common/guards/is.user.guard";
 const NotificationOwnershipGuard = ModelOwnershipGuardFactory(Notification, "id", ["user"]);
 
 @ApiTags("Notifications")
-@ApiBearerAuth()
+@ApiBearerAuth("JWT-auth")
 @Controller("notification")
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Get("my-noti")
-    @UseGuards(AuthGuard, IsUserGuard) // ModelOwnershipGuard olib tashlandi!
-    @ApiOperation({ summary: "Foydalanuvchiga tegishli barcha kartalarni olish" })
-    @ApiResponse({ status: 200, description: "Kartalar ro‘yxati", type: [Notification] })
-    async findAllForUser(@Req() req) {
-      const userId = req.user.id;
-      return this.notificationService.findAllByUserId(userId);
-    }
+  @UseGuards(AuthGuard, IsUserGuard) // ModelOwnershipGuard olib tashlandi!
+  @ApiOperation({ summary: "Foydalanuvchiga tegishli barcha kartalarni olish" })
+  @ApiResponse({
+    status: 200,
+    description: "Kartalar ro‘yxati",
+    type: [Notification],
+  })
+  async findAllForUser(@Req() req) {
+    const userId = req.user.id;
+    return this.notificationService.findAllByUserId(userId);
+  }
 
   @Post()
   @UseGuards(IsAdminGuard)

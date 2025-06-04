@@ -17,7 +17,7 @@ import { AuthGuard } from "../common/guards/auth.guard";
 import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("Workshop Schedule")
-@ApiBearerAuth()
+@ApiBearerAuth("JWT-auth")
 @Controller("workshop-schedule")
 export class WorkshopScheduleController {
   constructor(

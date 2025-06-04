@@ -17,7 +17,7 @@ import { AuthGuard } from "../common/guards/auth.guard";
 import { IsAdminGuard } from "../common/guards/is.admin.guard";
 
 @ApiTags("Payment")
-@ApiBearerAuth() // Swagger guruh nomi
+@ApiBearerAuth("JWT-auth") // Swagger guruh nomi
 @Controller("payment")
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}

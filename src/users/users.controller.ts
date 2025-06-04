@@ -27,7 +27,7 @@ import { User } from "./entities/user.entity";
 const UserOwnershipGuard = ModelOwnershipGuardFactory(User, "id", ["id"]);
 
 @ApiTags("Users")
-@ApiBearerAuth()
+@ApiBearerAuth("JWT-auth")
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
