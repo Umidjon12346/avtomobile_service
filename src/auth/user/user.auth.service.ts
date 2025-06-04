@@ -61,6 +61,9 @@ export class AuthUserService {
     if (!student) {
       throw new BadRequestException("Email yoki password hato");
     }
+    if(!student.is_active){
+      throw new ForbiddenException("Birinchi emaildan avtive boling")
+    }
     const isValidPassword = await bcrypt.compare(
       singInDto.password,
       student.hashed_password
