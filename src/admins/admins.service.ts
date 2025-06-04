@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -60,5 +60,26 @@ export class AdminsService {
   async remove(id: number) {
     await this.adminRepo.delete(id);
     return id;
+  }
+  
+  async updatePassword(
+    id: number,
+    dto: { oldpassword: string; newpassword: string }
+  ): Promise<string> {
+    const admin = await this.adminRepo.findOne({ where: { id } });
+
+    if (!admin) throw new NotFoundException("Foydalanuvchi topilmadi");
+    const isMatch = await bcrypt.compare(
+      dto.oldpassword,
+      admin!.hashed_password
+    );
+    if (!isMatch) throw new BadRequestException("Eski parol noto'g'ri");
+
+    const hashedNewPassword = await bcrypt.hash(dto.newpassword, 7);
+    admin!.hashed_password = hashedNewPassword;
+
+    await this.adminRepo.save(admin!);
+
+    return "Parol muvaffaqiyatli yangilandi";
   }
 }

@@ -22,6 +22,7 @@ import { IsAdminGuard } from "../common/guards/is.admin.guard";
 import { IsSuperAdminGuard } from "../common/guards/is.super.admin.guard";
 import { AuthGuard } from "../common/guards/auth.guard";
 import { ModelOwnershipGuardFactory } from "../common/guards/self.guard";
+import { CreateNewPassDto } from "./dto/new.pass.dto";
 
 const AdminOwnershipGuard = ModelOwnershipGuardFactory(Admin, "id", ["id"]);
 
@@ -71,6 +72,18 @@ export class AdminsController {
   @ApiResponse({ status: 200, description: "Admin yangilandi", type: Admin })
   update(@Param("id") id: string, @Body() updateAdminDto: UpdateAdminDto) {
     return this.adminsService.update(+id, updateAdminDto);
+  }
+
+  @UseGuards(AdminOwnershipGuard)
+  @UseGuards(IsAdminGuard)
+  @UseGuards(AuthGuard)
+  @Patch(":id/password")
+  async updatePassword(
+    @Param("id") id: number,
+    @Body() dto: CreateNewPassDto
+  ): Promise<{ message: string }> {
+    const result = await this.adminsService.updatePassword(id, dto);
+    return { message: result };
   }
 
   @Delete(":id")
